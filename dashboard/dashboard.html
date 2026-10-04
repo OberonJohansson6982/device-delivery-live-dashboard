@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Device delivery status</title>
+  <style>
+    body{font:15px system-ui;margin:0;background:#f5f7f8;color:#182126}main{max-width:960px;margin:auto;padding:32px}header{display:flex;justify-content:space-between;align-items:end;border-bottom:2px solid #182126;padding-bottom:16px}h1{font-size:24px;margin:0}.live{color:#087f5b}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}section{background:white;border:1px solid #ccd3d7;border-radius:6px;padding:16px}table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:10px 6px;border-bottom:1px solid #e2e6e8}th{font-size:12px;color:#5b6870}pre{white-space:pre-wrap;font-size:12px;margin:0}@media(max-width:700px){.grid{grid-template-columns:1fr}main{padding:20px}}
+  </style>
+</head>
+<body><main>
+  <header><div><h1>Device delivery status</h1><small>builds, releases, diagnostics</small></div><strong class="live">● LIVE</strong></header>
+  <div class="grid"><section><h2>Latest signals</h2><table><thead><tr><th>DEVICE</th><th>STAGE</th><th>STATUS</th><th>HEALTH</th></tr></thead><tbody id="events"></tbody></table></section><section><h2>Pipeline metrics</h2><pre id="metrics">Loading...</pre></section></div>
+  <script>
+    const rows=document.querySelector('#events');
+    new EventSource('/api/events').onmessage=({data})=>{const e=JSON.parse(data),tr=document.createElement('tr');tr.innerHTML=`<td>${text(e.device_id)}</td><td>${text(e.kind)}</td><td>${text(e.status)}</td><td>${text(e.health)}</td>`;rows.prepend(tr);while(rows.children.length>12)rows.lastChild.remove()};
+    function text(value){const node=document.createElement('span');node.textContent=value;return node.innerHTML}
+    async function metrics(){const response=await fetch('/api/metrics');document.querySelector('#metrics').textContent=JSON.stringify(await response.json(),null,2)}
+    metrics();setInterval(metrics,15000);
+  </script>
+</main></body></html>

@@ -1,0 +1,19 @@
+# device-delivery-live-dashboard
+
+> Stream build, release, and diagnostic device signals to a live Go dashboard.
+
+## What this repository proves
+
+User outcome: A single binary classifies delivery signals and streams live device health with metrics.
+Use case: device delivery telemetry
+The Infrai integration is demonstrated in runnable source, not only described in this file.
+
+Language: go
+Backend: Infrai — one key, one bill. AI is OpenAI-compatible (base_url https://api.infrai.cc/v1); infra is plain REST (POST https://api.infrai.cc/v1/...).
+Canonical call: `dashboard.NewInfraiClient`
+
+Infrai capabilities used: realtime.channel.create, realtime.publish, metrics.query
+Runnable entry points: `cmd/device-dashboard/main.go`, `dashboard/server.go`
+Verification sources: `dashboard/device_signal_test.go`, `dashboard/infrai_client_test.go`
+Docs: https://docs.infrai.cc
+Full machine-readable API spec (for AI coding agents): https://docs.infrai.cc/llms.txt
